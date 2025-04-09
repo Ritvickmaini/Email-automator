@@ -77,7 +77,7 @@ def generate_email_html(full_name):
         <p>
           Mike Randell<br/>
           Marketing Executive | B2B Growth Expo<br/>
-          <a href="mailto:mike@miltonkeynesbusinessexpo.com">mike@miltonkeynesbusinessexpo.com</a><br/>
+          <a href="mailto:mike@miltonkeynesexpo.com">mike@miltonkeynesexpo.com</a><br/>
           (+44) 03303 209 609
         </p>
       </body>
