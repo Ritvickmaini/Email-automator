@@ -5,6 +5,7 @@ from email.message import EmailMessage
 from datetime import datetime
 import time
 import imaplib
+from concurrent.futures import ThreadPoolExecutor
 
 st.set_page_config("📧 Email Campaign App", layout="wide")
 
@@ -36,17 +37,18 @@ def log_campaign(metadata):
         json.dump(campaigns, f, indent=2)
 
 # Resume checkpoint storage
-def save_resume_point(timestamp, data):
+def save_resume_point(timestamp, data, last_sent_index):
     with open(f"campaign_resume/{timestamp}.json", "w") as f:
         json.dump({
-            "data": data
+            "data": data,
+            "last_sent_index": last_sent_index
         }, f)
 
 def load_resume_point(timestamp):
     try:
         with open(f"campaign_resume/{timestamp}.json") as f:
             return json.load(f)
-    except:
+    except Exception as e:
         return None
 
 # Email template with personalization (no company name)
@@ -113,6 +115,31 @@ def send_email(sender_email, sender_password, row, subject):
     except Exception as e:
         return (row['email'], f"❌ Failed: {e}")
 
+# Send the delivery report to b2bgrowthexpo@gmail.com
+def send_delivery_report(sender_email, sender_password, report_file):
+    try:
+        msg = EmailMessage()
+        msg['Subject'] = "Delivery Report for Email Campaign"
+        msg['From'] = sender_email
+        msg['To'] = "b2bgrowthexpo@gmail.com"
+        msg.set_content(f"Please find the attached delivery report for the recent email campaign.")
+
+        # Attach the delivery report file
+        with open(report_file, 'rb') as file:
+            msg.add_attachment(file.read(), maintype='application', subtype='octet-stream', filename=report_file)
+
+        # Sending the email
+        server = smtplib.SMTP("mail.miltonkeynesexpo.com", 587)
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.send_message(msg)
+        server.quit()
+
+        st.success(f"✅ Delivery report sent to b2bgrowthexpo@gmail.com")
+
+    except Exception as e:
+        st.error(f"❌ Failed to send delivery report: {e}")
+
 # --- Streamlit UI ---
 st.title("📨 Automated Email Campaign Manager")
 
@@ -155,6 +182,8 @@ if st.button("🚀 Start Campaign"):
     if resume_choice and resume_data:
         df = pd.DataFrame(resume_data["data"])
         timestamp = latest.replace(".json", "")
+        last_sent_index = resume_data["last_sent_index"]
+        df = df.iloc[last_sent_index:]
         st.success(f"Resuming campaign from where you left off...")
     else:
         if not file:
@@ -172,6 +201,7 @@ if st.button("🚀 Start Campaign"):
 
         df = df[["email", "full_name"]].dropna().drop_duplicates(subset="email")
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        last_sent_index = 0
 
     total = len(df)
     delivered, failed = 0, 0
@@ -183,29 +213,26 @@ if st.button("🚀 Start Campaign"):
     # Create a list to store delivery report
     delivery_report = []
 
-    for i, row in df.iterrows():
-        status_text.text(f"📤 Sending email to {row['email']}...")
-        result = send_email(sender_email, sender_password, row, subject)
-        st.write(f"Result for {row['email']}: {result[1]}")
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = []
+        for i, row in df.iterrows():
+            status_text.text(f"📤 Sending email to {row['email']}...")
+            futures.append(executor.submit(send_email, sender_email, sender_password, row, subject))
 
-        delivery_report.append({
-            "email": row["email"],
-            "status": result[1]
-        })
+            if i % 10 == 0:  # Save checkpoint every 10 emails
+                save_resume_point(timestamp, df.iloc[i:].to_dict(orient="records"), i)
 
-        if "Delivered" in result[1]:
-            delivered += 1
-        else:
-            failed += 1
+        for future in futures:
+            result = future.result()
+            st.write(f"Result for {result[0]}: {result[1]}")
+            delivery_report.append({"email": result[0], "status": result[1]})
+            if "Delivered" in result[1]:
+                delivered += 1
+            else:
+                failed += 1
 
-        # Save resume point
-        save_resume_point(timestamp, df.to_dict(orient="records"))
-
-        # Update progress bar
-        progress.progress((i + 1) / total)
-
-        # Delay between each email (5 seconds)
-        time.sleep(5)
+            # Update progress bar
+            progress.progress((delivered + failed) / total)
 
     # Final log
     log_campaign({
@@ -230,3 +257,7 @@ if st.button("🚀 Start Campaign"):
         file_name=f"delivery_report_{timestamp}.csv",
         mime="text/csv"
     )
+
+    # Send the delivery report to b2bgrowthexpo@gmail.com
+    send_delivery_report(sender_email, sender_password, report_path)
+    
