@@ -36,10 +36,9 @@ def log_campaign(metadata):
         json.dump(campaigns, f, indent=2)
 
 # Resume checkpoint storage
-def save_resume_point(timestamp, batch_index, data):
+def save_resume_point(timestamp, data):
     with open(f"campaign_resume/{timestamp}.json", "w") as f:
         json.dump({
-            "batch_index": batch_index,
             "data": data
         }, f)
 
@@ -84,27 +83,13 @@ def generate_email_html(full_name):
     </html>
     """
 
-# Send a batch of emails
-def send_emails_batch(sender_email, sender_password, batch_df, subject):
-    import random
-    results = []
-
+# Send individual emails with a delay
+def send_email(sender_email, sender_password, row, subject):
     try:
         server = smtplib.SMTP("mail.miltonkeynesexpo.com", 587)
         server.starttls()
         server.login(sender_email, sender_password)
-    except Exception as e:
-        st.error(f"❌ SMTP Error: {e}")
-        return [(row['email'], f"❌ SMTP Error: {e}") for _, row in batch_df.iterrows()]
 
-    # Try IMAP for saving to Sent
-    try:
-        imap = imaplib.IMAP4_SSL("mail.miltonkeynesexpo.com")
-        imap.login(sender_email, sender_password)
-    except:
-        imap = None
-
-    for _, row in batch_df.iterrows():
         msg = EmailMessage()
         msg['Subject'] = subject
         msg['From'] = sender_email
@@ -112,24 +97,21 @@ def send_emails_batch(sender_email, sender_password, batch_df, subject):
         html_body = generate_email_html(row['full_name'])
         msg.set_content(html_body, subtype='html')
 
+        server.send_message(msg)
+
+        # IMAP for saving to Sent
         try:
-            server.send_message(msg)
-            results.append((row['email'], "✅ Delivered"))
-
-            if imap:
-                imap.append('INBOX.Sent', '', imaplib.Time2Internaldate(time.time()), msg.as_bytes())
-
-            delay = round(random.uniform(5, 12), 2)
-            st.write(f"⏳ Waiting {delay} seconds...")
-            time.sleep(delay)
-
+            imap = imaplib.IMAP4_SSL("mail.miltonkeynesexpo.com")
+            imap.login(sender_email, sender_password)
+            imap.append('INBOX.Sent', '', imaplib.Time2Internaldate(time.time()), msg.as_bytes())
+            imap.logout()
         except Exception as e:
-            results.append((row['email'], f"❌ Failed: {e}"))
+            st.error(f"❌ Failed to save to Sent folder: {e}")
 
-    server.quit()
-    if imap:
-        imap.logout()
-    return results
+        server.quit()
+        return (row['email'], "✅ Delivered")
+    except Exception as e:
+        return (row['email'], f"❌ Failed: {e}")
 
 # --- Streamlit UI ---
 st.title("📨 Automated Email Campaign Manager")
@@ -162,7 +144,7 @@ if os.path.exists("campaign_resume"):
         resume_data = load_resume_point(latest.replace(".json", ""))
         if resume_data:
             resume_available = True
-            resume_choice = st.checkbox(f"🔁 Resume Last Campaign ({latest}) from Batch {resume_data['batch_index'] + 1}")
+            resume_choice = st.checkbox(f"🔁 Resume Last Campaign ({latest})")
 
 # Send emails
 if st.button("🚀 Start Campaign"):
@@ -173,8 +155,7 @@ if st.button("🚀 Start Campaign"):
     if resume_choice and resume_data:
         df = pd.DataFrame(resume_data["data"])
         timestamp = latest.replace(".json", "")
-        start_batch = resume_data["batch_index"] + 1
-        st.success(f"Resuming campaign from batch {start_batch + 1}...")
+        st.success(f"Resuming campaign from where you left off...")
     else:
         if not file:
             st.warning("Please upload a CSV.")
@@ -191,39 +172,42 @@ if st.button("🚀 Start Campaign"):
 
         df = df[["email", "full_name"]].dropna().drop_duplicates(subset="email")
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        start_batch = 0
 
     total = len(df)
     delivered, failed = 0, 0
 
-    for i in range(start_batch, (total // 100) + 1):
-        batch = df.iloc[i*100 : (i+1)*100]
-        if batch.empty:
-            continue
+    # Progress bar
+    progress = st.progress(0)
+    status_text = st.empty()
 
-        st.info(f"Sending batch {i + 1} ({len(batch)} emails)...")
-        results = send_emails_batch(sender_email, sender_password, batch, subject)
+    # Create a list to store delivery report
+    delivery_report = []
 
-        # Report
-        df_result = pd.DataFrame(results, columns=["Email", "Status"])
-        report_file = f"campaign_results/campaign_{timestamp}_batch_{i+1}.json"
-        with open(report_file, "w") as f:
-            json.dump(results, f, indent=2)
+    for i, row in df.iterrows():
+        status_text.text(f"📤 Sending email to {row['email']}...")
+        result = send_email(sender_email, sender_password, row, subject)
+        st.write(f"Result for {row['email']}: {result[1]}")
 
-        st.dataframe(df_result)
-        st.download_button(
-            f"📥 Download Batch {i+1} Report",
-            df_result.to_csv(index=False).encode(),
-            file_name=f"delivery_report_batch_{i+1}.csv",
-            mime="text/csv"
-        )
+        delivery_report.append({
+            "email": row["email"],
+            "status": result[1]
+        })
 
-        delivered += sum(1 for _, s in results if "Delivered" in s)
-        failed += sum(1 for _, s in results if "Failed" in s)
+        if "Delivered" in result[1]:
+            delivered += 1
+        else:
+            failed += 1
 
         # Save resume point
-        save_resume_point(timestamp, i, df.to_dict(orient="records"))
+        save_resume_point(timestamp, df.to_dict(orient="records"))
 
+        # Update progress bar
+        progress.progress((i + 1) / total)
+
+        # Delay between each email (5 seconds)
+        time.sleep(5)
+
+    # Final log
     log_campaign({
         "timestamp": timestamp,
         "subject": subject,
@@ -233,3 +217,16 @@ if st.button("🚀 Start Campaign"):
     })
 
     st.success(f"✅ Campaign Finished — Delivered: {delivered}, Failed: {failed}")
+
+    # Generate the delivery report CSV
+    report_df = pd.DataFrame(delivery_report)
+    report_path = f"campaign_results/{timestamp}_delivery_report.csv"
+    report_df.to_csv(report_path, index=False)
+
+    # Provide the download link for the CSV report
+    st.download_button(
+        label="Download Delivery Report",
+        data=open(report_path, "rb").read(),
+        file_name=f"delivery_report_{timestamp}.csv",
+        mime="text/csv"
+    )
