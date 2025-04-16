@@ -54,7 +54,6 @@ def generate_email_html(full_name):
     return f"""
     <html>
       <body style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-        <h2 style="color: #2E86C1;">Welcome to the Milton Keynes B2B Growth Expo 2025!</h2>
         <p>Dear <strong>{full_name}</strong>,</p>
         <p>We’re thrilled to have you registered for the Milton Keynes B2B Growth Expo happening on <strong>23rd April</strong> at <strong>The Ridgeway Centre</strong> – and we’ve lined up a powerhouse of assured rewards and giveaways just for showing up and engaging!</p>
         <p><strong>Here’s what’s waiting for you:</strong></p>
@@ -62,7 +61,7 @@ def generate_email_html(full_name):
           <li style="margin-bottom: 10px;"><strong>25 Assured Business Leads</strong><br>Boost your sales pipeline instantly with 25 qualified leads from our Sales Lead Machine.</li>
           <li style="margin-bottom: 10px;"><strong>Free Brand New Digital Speaker</strong><br>Walk away with a high-quality digital speaker, gifted to you by B2B Growth Hub.</li>
           <li style="margin-bottom: 10px;"><strong>Free Expo Stand Next Time – Just Refer & Win</strong><br>Refer 10 businesses to register and attend. If they enter your name as reference, you get a complimentary stand next time!<br>
-          <a href="https://www.eventbrite.com/e/milton-keynes-b2b-growth-expo-23rd-april-2025-free-visitor-ticket-tickets-998974207747?aff=REFERAFRIEND" target="_blank">Refer this Eventbrite Link</a></li>
+          <a href="https://www.eventbrite.com/e/milton-keynes-b2b-growth-expo-23rd-april-2025-free-visitor-ticket-tickets-998974207747?aff=REFERAFRIEND" target="_blank">Register Your Ticket</a></li>
           <li style="margin-bottom: 10px;"><strong>Visit & Win – Brand New Sofa Set!</strong><br>Visit 50 stands and enter our lucky draw to win a stylish new sofa set.</li>
           <li style="margin-bottom: 10px;"><strong>£50 Cash with Tide Bank</strong><br>Open a business account at the expo and get £50 cash from B2B Growth Hub.</li>
           <li style="margin-bottom: 10px;"><strong>£50 Cash with Worldpay</strong><br>Set up a terminal during the event and get another £50.</li>
