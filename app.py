@@ -54,45 +54,34 @@ def generate_email_html(full_name):
     return f"""
     <html>
       <body style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+        <h2 style="color: #2E86C1;">You're Invited to the Milton Keynes Business Expo 2025!</h2>
         <p>Dear <strong>{full_name}</strong>,</p>
-        <p>We’re thrilled to have you registered for the Milton Keynes B2B Growth Expo happening on <strong>23rd April</strong> at <strong>The Ridgeway Centre</strong> – and we’ve lined up a powerhouse of assured rewards and giveaways just for showing up and engaging!</p>
-        <p><strong>Here’s what’s waiting for you:</strong></p>
-        <ol>
-          <li style="margin-bottom: 10px;"><strong>25 Assured Business Leads</strong><br>Boost your sales pipeline instantly with 25 qualified leads from our Sales Lead Machine.</li>
-          <li style="margin-bottom: 10px;"><strong>Free Brand New Digital Speaker</strong><br>Walk away with a high-quality digital speaker, gifted to you by B2B Growth Hub.</li>
-          <li style="margin-bottom: 10px;"><strong>Free Expo Stand Next Time – Just Refer & Win</strong><br>Refer 10 businesses to register and attend. If they enter your name as reference, you get a complimentary stand next time!<br>
-          <a href="https://www.eventbrite.com/e/milton-keynes-b2b-growth-expo-23rd-april-2025-free-visitor-ticket-tickets-998974207747?aff=REFERAFRIEND" target="_blank">Reference Ticket</a></li>
-          <li style="margin-bottom: 10px;"><strong>Visit & Win – Brand New Sofa Set!</strong><br>Visit 50 stands and enter our lucky draw to win a stylish new sofa set.</li>
-          <li style="margin-bottom: 10px;"><strong>£50 Cash with Tide Bank</strong><br>Open a business account at the expo and get £50 cash from B2B Growth Hub.</li>
-          <li style="margin-bottom: 10px;"><strong>£50 Cash with Worldpay</strong><br>Set up a terminal during the event and get another £50.</li>
-          <li style="margin-bottom: 10px;"><strong>Free Book – Vision to Victory</strong><br>Claim your free copy of <em>Vision to Victory</em> by Santosh Kumar.</li>
-          <li style="margin-bottom: 10px;"><strong>Free Annual Website Hosting</strong><br>Enjoy 1 year of free hosting from Visualytes.</li>
-          <li style="margin-bottom: 10px;"><strong>Free Business Listing worth £450</strong><br>Get a Diamond package listing on our directory for free.</li>
-        </ol>
-        <p>Your name is already on the list – now all you have to do is show up and claim what’s yours!</p>
-        <p><strong>Event Details:</strong><br>
-        Date: Tuesday, 23rd April<br>
-        Location: The Ridgeway Centre, Featherstone Rd, Wolverton Mill, Milton Keynes MK12 5TH</p>
-        <p>If you’d like to schedule a quick meeting with me, use this link:<br>
-        <a href="https://tidycal.com/nagendra/b2b-discovery-call" target="_blank">Book a Discovery Call</a></p>
-        <p>Thanks & Regards,</p>
+        <p>We are excited to invite you to the Milton Keynes Business Expo — one of the region’s largest networking events bringing together hundreds of businesses under one roof.</p>
+        <ul style="line-height: 1.6;">
+          <li><strong>Date:</strong> 23rd April, 2025</li>
+          <li><strong>Time:</strong> 10:00 AM – 4:30 PM</li>
+          <li><strong>Venue:</strong> The Ridgeway Centre, MK12 5TH, United Kingdom</li>
+        </ul>
+        <p style="margin-top: 20px;">🎟️ <strong>Grab your free visitor ticket:</strong><br/>
+        <a href="https://www.eventbrite.com/e/998974207747" target="_blank" style="display: inline-block; background-color: #2E86C1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px;">
+          Register on Eventbrite
+        </a></p>
+        <p style="margin-top: 30px;">If you’re interested in exhibiting or getting involved as a keynote speaker, seminar host, or panelist — simply reply to this email or contact us at the number provided below.</p>
+        <br/>
+        <p>Best regards,</p>
         <p>
-          Nagendra Mishra<br/>
-          Director | B2B Growth Hub<br/>
-          <a href="mailto:nagendra@b2bgrowthexpo.com">nagendra@b2bgrowthexpo.com</a><br/>
-          +44 7913 027482<br/>
-          www.b2bgrowthhub.com
-        </p>
-        <p style="margin-top: 30px; font-size: 0.9em; color: #888;">
-          If you don't want to hear from me again, please let me know.
+          Mike Randell<br/>
+          Marketing Executive | B2B Growth Expo<br/>
+          <a href="mailto:mike@miltonkeynesexpo.com">mike@miltonkeynesexpo.com</a><br/>
+          (+44) 03303 209 609
         </p>
       </body>
     </html>
     """
 
-def send_email(sender_email, sender_password, row, subject, smtp_server):
+def send_email(sender_email, sender_password, row, subject):
     try:
-        server = smtplib.SMTP(smtp_server, 587)
+        server = smtplib.SMTP("mail.miltonkeynesexpo.com", 587)
         server.starttls()
         server.login(sender_email, sender_password)
 
@@ -105,7 +94,7 @@ def send_email(sender_email, sender_password, row, subject, smtp_server):
         server.send_message(msg)
 
         try:
-            imap = imaplib.IMAP4_SSL(smtp_server)
+            imap = imaplib.IMAP4_SSL("mail.miltonkeynesexpo.com")
             imap.login(sender_email, sender_password)
             imap.append('INBOX.Sent', '', imaplib.Time2Internaldate(time.time()), msg.as_bytes())
             imap.logout()
@@ -117,7 +106,7 @@ def send_email(sender_email, sender_password, row, subject, smtp_server):
     except Exception as e:
         return (row['email'], f"❌ Failed: {e}")
 
-def send_delivery_report(sender_email, sender_password, report_file, smtp_server):
+def send_delivery_report(sender_email, sender_password, report_file):
     try:
         msg = EmailMessage()
         msg['Subject'] = "Delivery Report for Email Campaign"
@@ -128,7 +117,7 @@ def send_delivery_report(sender_email, sender_password, report_file, smtp_server
         with open(report_file, 'rb') as file:
             msg.add_attachment(file.read(), maintype='application', subtype='octet-stream', filename=os.path.basename(report_file))
 
-        server = smtplib.SMTP(smtp_server, 587)
+        server = smtplib.SMTP("mail.miltonkeynesexpo.com", 587)
         server.starttls()
         server.login(sender_email, sender_password)
         server.send_message(msg)
@@ -149,25 +138,15 @@ with st.expander("📜 View Past Campaigns"):
         st.markdown(f"**{label}** | 👥 {c['total']} | ✅ {c['delivered']} | ❌ {c['failed']}")
 
 st.header("📤 Send Email Campaign")
-
-server_options = {
-    "Mike (miltonkeynesexpo.com)": ("mail.miltonkeynesexpo.com", "mike@miltonkeynesexpo.com"),
-    "Nagendra (b2bgrowthexpo.com)": ("mail.b2bgrowthexpo.com", "nagendra@b2bgrowthexpo.com"),
-}
-
-selected_identity = st.selectbox("Select Sender Identity", list(server_options.keys()))
-smtp_server, sender_email = server_options[selected_identity]
-
-st.text_input("Sender Email", value=sender_email, disabled=True)
+sender_email = st.text_input("Sender Email", value="mike@miltonkeynesexpo.com")
 sender_password = st.text_input("Password", type="password")
 subject = st.text_input("Email Subject")
 campaign_name = st.text_input("Campaign Name", placeholder="e.g. MK Expo – VIP Invite List")
 file = st.file_uploader("Upload CSV with `email`, `full name` columns")
 
 st.subheader("📧 Preview of Email:")
-st.components.v1.html(generate_email_html("Sarah Johnson"), height=800, scrolling=True)
+st.components.v1.html(generate_email_html("Sarah Johnson"), height=500, scrolling=True)
 
-# Resume section unchanged
 resume_data = None
 resume_choice = False
 latest_resume = None
@@ -224,7 +203,7 @@ if st.button("🚀 Start Campaign"):
 
         for i, row in df.iterrows():
             status_text.text(f"📤 Sending email to {row['email']}")
-            futures.append(executor.submit(send_email, sender_email, sender_password, row, subject, smtp_server))
+            futures.append(executor.submit(send_email, sender_email, sender_password, row, subject))
 
         for i, future in enumerate(futures):
             email, result = future.result()
@@ -244,10 +223,13 @@ if st.button("🚀 Start Campaign"):
             mins, secs = divmod(remaining, 60)
             time_text.text(f"⏳ Estimated time left: {int(mins)}m {int(secs)}s")
 
+    # Final time and summary
     duration = perf_counter() - start_time
     final_mins, final_secs = divmod(duration, 60)
+
     avg_per_email = duration / total
-    est_mins, est_secs = divmod(avg_per_email * total, 60)
+    estimated_total = avg_per_email * total
+    est_mins, est_secs = divmod(estimated_total, 60)
 
     time_text.markdown(
         f"""
@@ -257,6 +239,7 @@ if st.button("🚀 Start Campaign"):
         """
     )
 
+    # Styled summary card
     with st.container():
         st.markdown("### 📊 Campaign Summary")
         col1, col2, col3 = st.columns(3)
@@ -279,4 +262,4 @@ if st.button("🚀 Start Campaign"):
 
         st.download_button("📥 Download Delivery Report", data=report_df.to_csv(index=False), file_name=os.path.basename(report_filename), mime="text/csv")
 
-        send_delivery_report(sender_email, sender_password, report_filename, smtp_server)
+        send_delivery_report(sender_email, sender_password, report_filename)
