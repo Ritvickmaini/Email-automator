@@ -62,7 +62,7 @@ def generate_email_html(full_name):
           <li><strong>25 Assured Business Leads</strong><br>Boost your sales pipeline instantly with 25 qualified leads from our Sales Lead Machine.</li>
           <li><strong>Free Brand New Digital Speaker</strong><br>Walk away with a high-quality digital speaker, gifted to you by B2B Growth Hub.</li>
           <li><strong>Free Expo Stand Next Time – Just Refer & Win</strong><br>Refer 10 businesses to register and attend. If they enter your name as reference, you get a complimentary stand next time!<br>
-          <a href="https://www.eventbrite.com/e/milton-keynes-b2b-growth-expo-23rd-april-2025-free-visitor-ticket-tickets-998974207747?aff=REFERAFRIEND" target="_blank">Refer via Eventbrite</a></li>
+          <a href="https://www.eventbrite.com/e/milton-keynes-b2b-growth-expo-23rd-april-2025-free-visitor-ticket-tickets-998974207747?aff=REFERAFRIEND" target="_blank">Register Your Ticket</a></li>
           <li><strong>Visit & Win – Brand New Sofa Set!</strong><br>Visit 50 stands and enter our lucky draw to win a stylish new sofa set.</li>
           <li><strong>£50 Cash with Tide Bank</strong><br>Open a business account at the expo and get £50 cash from B2B Growth Hub.</li>
           <li><strong>£50 Cash with Worldpay</strong><br>Set up a terminal during the event and get another £50.</li>
