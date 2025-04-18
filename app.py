@@ -1,4 +1,4 @@
-# --- All imports and setup unchanged ---
+# --- All imports and setup ---
 import streamlit as st
 import pandas as pd
 import smtplib, os, json
@@ -9,33 +9,77 @@ import imaplib
 from concurrent.futures import ThreadPoolExecutor
 from time import perf_counter
 import urllib.parse
+import uuid
+import gspread
+from google.oauth2.service_account import Credentials
 
 st.set_page_config("📧 Email Campaign App", layout="wide")
 
-# ✅ Uptime Robot check
+# --- Google Sheet Setup ---
+SHEET_NAME = "CampaignHistory"
+SCOPE = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
+SERVICE_ACCOUNT_FILE = "service_account.json"
+
+@st.cache_resource
+def get_google_sheet():
+    from google.oauth2.service_account import Credentials
+    import gspread
+
+    SERVICE_ACCOUNT_FILE = 'service_account.json'
+    SCOPE = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive"
+    ]
+
+    credentials = Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE,
+        scopes=SCOPE
+    )
+
+    gc = gspread.authorize(credentials)
+    sheet = gc.open("CampaignHistory").sheet1
+
+    # Check if headers exist, if not, create them
+    headers = sheet.row_values(1)
+    if not headers:
+        sheet.insert_row(["timestamp", "campaign_name", "subject", "total", "delivered", "failed"], 1)
+    
+    return sheet
+
+
+def append_to_sheet(data_dict):
+    sheet = get_google_sheet()
+    if sheet:
+        sheet.append_row(list(data_dict.values()), value_input_option="USER_ENTERED")
+
+def load_campaigns_from_sheet():
+    sheet = get_google_sheet()
+    if not sheet:
+        return []
+    records = sheet.get_all_records()
+    return records
+
+# --- Uptime Check ---
 params = st.query_params
 if "ping" in params:
     st.write("✅ App is alive!")
     st.stop()
 
-# Create folders if missing
+# Folders
 os.makedirs("campaign_results", exist_ok=True)
 os.makedirs("campaign_resume", exist_ok=True)
 
+# Functions
 def load_campaigns():
-    if os.path.exists("campaigns.json"):
-        try:
-            with open("campaigns.json") as f:
-                return json.load(f)
-        except json.JSONDecodeError:
-            return []
-    return []
+    return load_campaigns_from_sheet()
 
 def log_campaign(metadata):
-    campaigns = load_campaigns()
-    campaigns.append(metadata)
     with open("campaigns.json", "w") as f:
-        json.dump(campaigns, f, indent=2)
+        json.dump(load_campaigns_from_sheet() + [metadata], f, indent=2)
+    append_to_sheet(metadata)
 
 def save_resume_point(timestamp, data, last_sent_index):
     with open(f"campaign_resume/{timestamp}.json", "w") as f:
@@ -52,7 +96,6 @@ def load_resume_point(timestamp):
         return None
 
 def generate_email_html(full_name, recipient_email=None):
-
     if not full_name or str(full_name).lower() == "nan":
         name_part = ","
     else:
@@ -148,7 +191,7 @@ st.title("📨 Automated Email Campaign Manager")
 with st.expander("📜 View Past Campaigns"):
     for c in reversed(load_campaigns()):
         name = c.get("campaign_name", "")
-        timestamp = c["timestamp"]
+        timestamp = c.get("timestamp", "")
         label = f"📧 {name} {timestamp}" if name else f"🕒 {timestamp}"
         st.markdown(f"**{label}** | 👥 {c['total']} | ✅ {c['delivered']} | ❌ {c['failed']}")
 
@@ -213,7 +256,7 @@ if st.button("🚀 Start Campaign"):
 
     start_time = perf_counter()
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=40) as executor:
         futures = []
 
         for i, row in df.iterrows():
@@ -241,7 +284,6 @@ if st.button("🚀 Start Campaign"):
     # Final time and summary
     duration = perf_counter() - start_time
     final_mins, final_secs = divmod(duration, 60)
-
     avg_per_email = duration / total
     estimated_total = avg_per_email * total
     est_mins, est_secs = divmod(estimated_total, 60)
@@ -254,7 +296,6 @@ if st.button("🚀 Start Campaign"):
         """
     )
 
-    # Styled summary card
     with st.container():
         st.markdown("### 📊 Campaign Summary")
         col1, col2, col3 = st.columns(3)
@@ -262,14 +303,16 @@ if st.button("🚀 Start Campaign"):
         col2.metric("✅ Delivered", delivered)
         col3.metric("❌ Failed", failed)
 
-        log_campaign({
+        metadata = {
             "timestamp": timestamp,
             "campaign_name": campaign_name,
             "subject": subject,
             "total": total,
             "delivered": delivered,
             "failed": failed
-        })
+        }
+
+        log_campaign(metadata)
 
         report_df = pd.DataFrame(delivery_report)
         report_filename = f"campaign_results/report_{campaign_name.replace(' ', '_')}_{timestamp}.csv"
