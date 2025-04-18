@@ -96,7 +96,7 @@ def generate_email_html(full_name, recipient_email=None):
     else:
         name_part = f" {full_name},"
 
-    event_url = "https://www.eventbrite.com/e/998974207747"
+    event_url = "https://thebusinessgrowthcrowd.eventbrite.co.uk/?aff=B2BEXPO"
     encoded_event_url = urllib.parse.quote(event_url, safe='')
 
     email_for_tracking = recipient_email if recipient_email else "unknown@example.com"
@@ -106,29 +106,52 @@ def generate_email_html(full_name, recipient_email=None):
     return f"""
     <html>
       <body style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-        <h2 style="color: #2E86C1;">You're Invited to the Milton Keynes Business Expo 2025!</h2>
-        <p>Dear <strong>{name_part}</strong>,</p>
-        <p>We are excited to invite you to the Milton Keynes Business Expo — one of the region’s largest networking events bringing together hundreds of businesses under one roof.</p>
-        <ul style="line-height: 1.6;">
-          <li><strong>Date:</strong> 23rd April, 2025</li>
-          <li><strong>Time:</strong> 10:00 AM – 4:30 PM</li>
-          <li><strong>Venue:</strong> The Ridgeway Centre, MK12 5TH, United Kingdom</li>
+    <h2 style="color: #2E86C1;">You're Invited to the VIP Launch of The Business Growth Crowd</h2>
+    <p>Dear <strong>{name_part}</strong>,</p>
+    <p>It is with great pleasure that B2B Growth Expo invites you to join our partners, <strong>Elite Crowdmakers</strong>, for the exclusive VIP launch of <strong>'The Business Growth Crowd'</strong>.</p>
+    <ul style="line-height: 1.6;">
+      <li><strong>Date:</strong> Wednesday, 23rd April 2025</li>
+      <li><strong>Time:</strong> 12:00 PM – 2:45 PM</li>
+      <li><strong>Venue:</strong> The Mercure Milton Keynes Hotel, Two Mile Ash, MK8 8LY</li>
+    </ul>
+    <p>As the <strong>Milton Keynes Business Expo</strong> begins at 9:00 AM, we look forward to seeing you in the morning at The Ridgeway Centre. You're also welcome to return after the VIP launch, as the expo closes at 4:30 PM.</p>
+
+    <p><strong>What to expect at the VIP Launch:</strong></p>
+    <ul style="line-height: 1.6;">
+      <li>High-profile networking opportunities</li>
+      <li>2-course lunch and drinks reception</li>
+      <li>Interview and appearance on the official showreel</li>
+      <li>Expert speakers including:
+        <ul>
+          <li><strong>Nana Akua</strong> – GB News Anchor & Journalist</li>
+          <li><strong>Stephen Gillen</strong> – Founder of Publicity Hounds LTD</li>
+          <li><strong>Tommie Edwards</strong> – Tech 1M</li>
+          <li><strong>Chris Smith</strong> – Nudj.com</li>
         </ul>
-        <p style="margin-top: 20px;">🎟️ <strong>Grab your free visitor ticket:</strong><br/>
-        <a href="{tracking_link}" target="_blank" style="display: inline-block; background-color: #2E86C1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px;">
-          Register on Eventbrite
-        </a></p>
-        <p style="margin-top: 30px;">If you’re interested in exhibiting or getting involved as a keynote speaker, seminar host, or panelist — simply reply to this email or contact us at the number provided below.</p>
-        <br/>
-        <p>Best regards,</p>
-        <p>
-          Mike Randell<br/>
-          Marketing Executive | B2B Growth Expo<br/>
-          <a href="mailto:mike@miltonkeynesexpo.com">mike@miltonkeynesexpo.com</a><br/>
-          (+44) 03303 209 609
-        </p>
-        {tracking_pixel}
-      </body>
+      </li>
+    </ul>
+
+    <p style="margin-top: 20px;">🚀 <strong>Book your VIP ticket now:</strong><br/>
+      <a href="{tracking_link}" target="_blank" style="display: inline-block; background-color: #2E86C1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px;">
+        Reserve Your Spot
+      </a>
+    </p>
+
+    <p style="margin-top: 30px;"><em>The hotel is a quick 5-minute Uber ride from the Ridgeway Centre.</em></p>
+
+    <p>We look forward to welcoming you!</p>
+
+    <br/>
+    <p>Best regards,</p>
+    <p>
+      Mike Randell<br/>
+      Marketing Executive | B2B Growth Expo<br/>
+      <a href="mailto:mike@miltonkeynesexpo.com">mike@miltonkeynesexpo.com</a><br/>
+      (+44) 03303 209 609
+    </p>
+
+    {tracking_pixel}
+  </body>
     </html>
     """
 
