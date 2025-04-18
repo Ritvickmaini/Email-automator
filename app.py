@@ -131,7 +131,7 @@ def generate_email_html(full_name, recipient_email=None):
       </li>
     </ul>
 
-    <p style="margin-top: 20px;"> <strong>Book your VIP ticket now:</strong><br/>
+    <p style="margin-top: 20px;"> <strong>To book your place please click button below:</strong><br/>
       <a href="{tracking_link}" target="_blank" style="display: inline-block; background-color: #2E86C1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px;">
         Reserve Your Spot
       </a>
