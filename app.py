@@ -106,24 +106,24 @@ def generate_email_html(full_name, recipient_email=None):
     return f"""
     <html>
       <body style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-    <h2 style="color: #2E86C1;">You're Invited to the VIP Launch of The Business Growth Crowd</h2>
+    <h2 style="color: #2E86C1;">Exclusive VIP Invitation: Join Us at The Business Growth Crowd Launch</h2>
     <p>Dear <strong>{name_part}</strong>,</p>
-    <p>It is with great pleasure that B2B Growth Expo invites you to join our partners, <strong>Elite Crowdmakers</strong>, for the exclusive VIP launch of <strong>'The Business Growth Crowd'</strong>.</p>
+    <p>It is with great pleasure that B2B Growth Expo invites you to join our partners, <strong>Elite Crowdmakers</strong>, for the VIP launch of <strong>'The Business Growth Crowd'</strong>.</p>
     <ul style="line-height: 1.6;">
       <li><strong>Date:</strong> Wednesday, 23rd April 2025</li>
       <li><strong>Time:</strong> 12:00 PM – 2:45 PM</li>
       <li><strong>Venue:</strong> The Mercure Milton Keynes Hotel, Two Mile Ash, MK8 8LY</li>
     </ul>
-    <p>As the <strong>Milton Keynes Business Expo</strong> begins at 9:00 AM, we look forward to seeing you in the morning at The Ridgeway Centre. You're also welcome to return after the VIP launch, as the expo closes at 4:30 PM.</p>
+    <p>As an exhibitor, we understand that your main priority will be to man your stand during the expo. If you or your business would like a presence at this VIP launch event, it is advisable to bring a second person to help manage your stand during this time.</p>
 
     <p><strong>What to expect at the VIP Launch:</strong></p>
     <ul style="line-height: 1.6;">
       <li>High-profile networking opportunities</li>
       <li>2-course lunch and drinks reception</li>
       <li>Interview and appearance on the official showreel</li>
-      <li>Expert speakers including:
+      <li>Expert speakers, including:
         <ul>
-          <li><strong>Nana Akua</strong> – GB News Anchor & Journalist</li>
+          <li><strong>Nana Akua</strong> – GB News Anchor & Journalist (Headline Speaker)</li>
           <li><strong>Stephen Gillen</strong> – Founder of Publicity Hounds LTD</li>
           <li><strong>Tommie Edwards</strong> – Tech 1M</li>
           <li><strong>Chris Smith</strong> – Nudj.com</li>
@@ -139,7 +139,7 @@ def generate_email_html(full_name, recipient_email=None):
 
     <p style="margin-top: 30px;"><em>The hotel is a quick 5-minute Uber ride from the Ridgeway Centre.</em></p>
 
-    <p>We look forward to welcoming you!</p>
+    <p>We look forward to seeing you at the event!</p>
 
     <br/>
     <p>Best regards,</p>
