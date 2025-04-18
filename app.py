@@ -8,6 +8,7 @@ import time
 import imaplib
 from concurrent.futures import ThreadPoolExecutor
 from time import perf_counter
+import urllib.parse
 
 st.set_page_config("📧 Email Campaign App", layout="wide")
 
@@ -50,54 +51,45 @@ def load_resume_point(timestamp):
     except Exception:
         return None
 
-def generate_email_html(full_name):
+def generate_email_html(full_name, recipient_email=None):
+
+    if not full_name or str(full_name).lower() == "nan":
+        name_part = ","
+    else:
+        name_part = f" {full_name},"
+
+    event_url = "https://www.eventbrite.com/e/998974207747"
+    encoded_event_url = urllib.parse.quote(event_url, safe='')
+
+    email_for_tracking = recipient_email if recipient_email else "unknown@example.com"
+    tracking_link = f"https://tracking-oyzi.onrender.com/track/click?email={email_for_tracking}&url={encoded_event_url}"
+    tracking_pixel = f'<img src="https://tracking-oyzi.onrender.com/track/open?email={email_for_tracking}" width="1" height="1" style="display:none;">'
+
     return f"""
     <html>
       <body style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-        <p>Dear <strong>{full_name}</strong>,</p>
-        <p>We’re thrilled to have you registered for the <strong>Milton Keynes B2B Growth Expo</strong> happening on <strong>23rd April 2025</strong> at <strong>Ridgeway Centre</strong> – and we’ve lined up a powerhouse of assured rewards and giveaways just for showing up and engaging!</p>
-
-        <h3>Here’s what’s waiting for you:</h3>
-        <ol style="padding-left: 20px;">
-          <li style="margin-bottom: 15px;"><strong>25 Assured Business Leads</strong> – Boost your sales pipeline instantly with 25 qualified leads from our Sales Lead Machine.</li>
-          <li style="margin-bottom: 15px;"><strong>Free Brand New Digital Speaker</strong> – Walk away with a high-quality digital speaker, gifted to you by B2B Growth Hub.</li>
-          <li style="margin-bottom: 15px;"><strong>Free Expo Stand Next Time – Just Refer & Win</strong> – Refer 10 friends/businesses to register and attend the expo. Ask them to enter your full name as the reference, and you get a complimentary stand at our next big show!<br/>
-            <a href="https://www.eventbrite.com/e/milton-keynes-b2b-growth-expo-23rd-april-2025-free-visitor-ticket-tickets-998974207747?aff=REFERAFRIEND">
-               Refer Friends
-            </a>
-          </li>
-          <li style="margin-bottom: 15px;"><strong>Visit & Win – Brand New Sofa Set!</strong> – Visit 50 stands on the day and enter our lucky draw to win a stylish new sofa set for your home or office.</li>
-          <li style="margin-bottom: 15px;"><strong>£50 Cash with Tide Bank</strong> – Open a free business bank account with Tide at the expo and get £50 cash from B2B Growth Hub – no strings attached!</li>
-          <li style="margin-bottom: 15px;"><strong>£50 Cash with Worldpay</strong> – Set up a payment terminal with Worldpay during the event and take home another £50 cash reward from B2B Growth Hub.</li>
-          <li style="margin-bottom: 15px;"><strong>Free Book – Business Bible for Entrepreneurs: Vision to Victory</strong> – Grab your complimentary copy of Vision to Victory by Santosh Kumar – a must-read for entrepreneurs and growth-driven minds.</li>
-          <li style="margin-bottom: 15px;"><strong>Free Annual Website Hosting</strong> – Get 1-year FREE hosting for your website courtesy of our generous sponsor, Visualytes.</li>
-          <li style="margin-bottom: 15px;"><strong>Free Business Listing on our Directory worth £450</strong> – Get a free business listing on our directory on the Diamond package on the spot.</li>
-        </ol>
-
-        <p>Your name is already on the list – now all you have to do is turn up and claim what’s yours!</p>
-
-        <h4>📅 Mark your calendar:</h4>
-        <ul>
-          <li><strong>Date:</strong> Tuesday, 23rd April</li>
-          <li><strong>Location:</strong> The Ridgeway Centre, Featherstone Rd, Wolverton Mill, Milton Keynes MK12 5TH</li>
+        <h2 style="color: #2E86C1;">You're Invited to the Milton Keynes Business Expo 2025!</h2>
+        <p>Dear <strong>{name_part}</strong>,</p>
+        <p>We are excited to invite you to the Milton Keynes Business Expo — one of the region’s largest networking events bringing together hundreds of businesses under one roof.</p>
+        <ul style="line-height: 1.6;">
+          <li><strong>Date:</strong> 23rd April, 2025</li>
+          <li><strong>Time:</strong> 10:00 AM – 4:30 PM</li>
+          <li><strong>Venue:</strong> The Ridgeway Centre, MK12 5TH, United Kingdom</li>
         </ul>
-
-        <p>Make connections, grow your business, and walk away with more than just inspiration!</p>
-
-        <p>If you would like to schedule a meeting with me at your convenient time, please use the diary link below:<br/>
-        <a href="https://tidycal.com/nagendra/b2b-discovery-call">Book a Call with Me</a></p>
-
+        <p style="margin-top: 20px;">🎟️ <strong>Grab your free visitor ticket:</strong><br/>
+        <a href="{tracking_link}" target="_blank" style="display: inline-block; background-color: #2E86C1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px;">
+          Register on Eventbrite
+        </a></p>
+        <p style="margin-top: 30px;">If you’re interested in exhibiting or getting involved as a keynote speaker, seminar host, or panelist — simply reply to this email or contact us at the number provided below.</p>
         <br/>
-        <p>Thanks & Regards,</p>
-        <div style="margin-top: 10px; font-size: 14px; line-height: 1.6;">
-          <strong>Mike Randell</strong><br/>
+        <p>Best regards,</p>
+        <p>
+          Mike Randell<br/>
           Marketing Executive | B2B Growth Expo<br/>
-          Mo: +44 7913 027482<br/>
-          Email: <a href="mailto:mike@miltonkeynesexpo.com">mike@miltonkeynesexpo.com</a><br/>
-          <a href="https://www.b2bgrowthexpo.com">www.b2bgrowthexpo.com</a>
-        </div>
-        <br/>
-        <p style="font-size: 12px; color: gray;">If you don’t want to hear from me again, please let me know.</p>
+          <a href="mailto:mike@miltonkeynesexpo.com">mike@miltonkeynesexpo.com</a><br/>
+          (+44) 03303 209 609
+        </p>
+        {tracking_pixel}
       </body>
     </html>
     """
@@ -112,7 +104,7 @@ def send_email(sender_email, sender_password, row, subject):
         msg['Subject'] = subject
         msg['From'] = sender_email
         msg['To'] = row['email']
-        msg.set_content(generate_email_html(row['full_name']), subtype='html')
+        msg.set_content(generate_email_html(row['full_name'], row['email']), subtype='html')
 
         server.send_message(msg)
 
@@ -207,7 +199,7 @@ if st.button("🚀 Start Campaign"):
             st.error("CSV must contain `email` and `full name` columns.")
             st.stop()
 
-        df = df[["email", "full_name"]].dropna().drop_duplicates(subset="email")
+        df = df[["email", "full_name"]].dropna(subset=["email"]).drop_duplicates(subset="email")
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         last_sent_index = 0
 
