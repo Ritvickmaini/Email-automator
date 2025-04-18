@@ -21,26 +21,21 @@ SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
 ]
-SERVICE_ACCOUNT_FILE = "service_account.json"
 
 @st.cache_resource
 def get_google_sheet():
     from google.oauth2.service_account import Credentials
     import gspread
 
-    SERVICE_ACCOUNT_FILE = 'service_account.json'
-    SCOPE = [
-        "https://www.googleapis.com/auth/spreadsheets",
-        "https://www.googleapis.com/auth/drive"
-    ]
-
-    credentials = Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE,
+    # Load credentials from Streamlit secrets
+    service_account_info = st.secrets["gcp_service_account"]
+    credentials = Credentials.from_service_account_info(
+        service_account_info,
         scopes=SCOPE
     )
 
     gc = gspread.authorize(credentials)
-    sheet = gc.open("CampaignHistory").sheet1
+    sheet = gc.open(SHEET_NAME).sheet1
 
     # Check if headers exist, if not, create them
     headers = sheet.row_values(1)
