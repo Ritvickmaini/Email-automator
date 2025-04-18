@@ -28,7 +28,7 @@ def get_google_sheet():
     import gspread
 
     # Load credentials from Streamlit secrets
-    service_account_info = st.secrets["gcp_service_account"]
+    service_account_info = st.secrets["google_service_account"]
     credentials = Credentials.from_service_account_info(
         service_account_info,
         scopes=SCOPE
