@@ -273,7 +273,7 @@ if st.button("🚀 Start Campaign"):
 
     start_time = perf_counter()
 
-    with ThreadPoolExecutor(max_workers=40) as executor:
+    with ThreadPoolExecutor(max_workers=20) as executor:
         futures = []
 
         for i, row in df.iterrows():
