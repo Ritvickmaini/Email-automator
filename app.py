@@ -118,7 +118,7 @@ def generate_email_html(full_name, recipient_email=None):
           <li><strong>Venue:</strong> The Ridgeway Centre, MK12 5TH, United Kingdom</li>
         </ul>
 
-        <p>🎯 Why should you attend?</p>
+        <p> Why should you attend?</p>
         <ul style="line-height: 1.6;">
           <li>Meet over 100+ local and national businesses</li>
           <li>Gain insights from expert speakers and panelists</li>
