@@ -102,56 +102,55 @@ def generate_email_html(full_name, recipient_email=None):
     email_for_tracking = recipient_email if recipient_email else "unknown@example.com"
     tracking_link = f"https://tracking-oyzi.onrender.com/track/click?email={email_for_tracking}&url={encoded_event_url}"
     tracking_pixel = f'<img src="https://tracking-oyzi.onrender.com/track/open?email={email_for_tracking}" width="1" height="1" style="display:none;">'
+    unsubscribe_link = f"https://unsubscribe-thsj.onrender.com/unsubscribe?email={email_for_tracking}"
 
     return f"""
     <html>
       <body style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-    <h2 style="color: #2E86C1;">Exclusive VIP Invitation: Join Us at The Business Growth Crowd Launch</h2>
-    <p>Dear <strong>{name_part}</strong>,</p>
-    <p>It is with great pleasure that B2B Growth Expo invites you to join our partners, <strong>Elite Crowdmakers</strong>, for the VIP launch of <strong>'The Business Growth Crowd'</strong>.</p>
-    <ul style="line-height: 1.6;">
-      <li><strong>Date:</strong> Wednesday, 23rd April 2025</li>
-      <li><strong>Time:</strong> 12:00 PM – 2:45 PM</li>
-      <li><strong>Venue:</strong> The Mercure Milton Keynes Hotel, Two Mile Ash, MK8 8LY</li>
-    </ul>
-    <p>As an exhibitor, we understand that your main priority will be to man your stand during the expo. If you or your business would like a presence at this VIP launch event, it is advisable to bring a second person to help manage your stand during this time.</p>
+        <h2 style="color: #2E86C1;">⏳ Only 5 Days to Go: Milton Keynes Business Expo 2025</h2>
+        <p>Dear <strong>{name_part}</strong>,</p>
 
-    <p><strong>What to expect at the VIP Launch:</strong></p>
-    <ul style="line-height: 1.6;">
-      <li>High-profile networking opportunities</li>
-      <li>2-course lunch and drinks reception</li>
-      <li>Interview and appearance on the official showreel</li>
-      <li>Expert speakers, including:
-        <ul>
-          <li><strong>Nana Akua</strong> – GB News Anchor & Journalist (Headline Speaker)</li>
-          <li><strong>Stephen Gillen</strong> – Founder of Publicity Hounds LTD</li>
-          <li><strong>Tommie Edwards</strong> – Tech 1M</li>
-          <li><strong>Chris Smith</strong> – Nudj.com</li>
+        <p>The countdown is on! In just <strong>5 days</strong>, hundreds of business professionals, industry leaders, and forward-thinking entrepreneurs will gather under one roof for the <strong>Milton Keynes Business Expo 2025</strong>.</p>
+
+        <ul style="line-height: 1.6;">
+          <li><strong>Date:</strong> Wednesday, 23rd April 2025</li>
+          <li><strong>Time:</strong> 10:00 AM – 4:30 PM</li>
+          <li><strong>Venue:</strong> The Ridgeway Centre, MK12 5TH, United Kingdom</li>
         </ul>
-      </li>
-    </ul>
 
-    <p style="margin-top: 20px;"> <strong>To book your place please click button below:</strong><br/>
-      <a href="{tracking_link}" target="_blank" style="display: inline-block; background-color: #2E86C1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px;">
-        Reserve Your Spot
-      </a>
-    </p>
+        <p>🎯 Why should you attend?</p>
+        <ul style="line-height: 1.6;">
+          <li>Meet over 100+ local and national businesses</li>
+          <li>Gain insights from expert speakers and panelists</li>
+          <li>Build powerful connections that can drive your business forward</li>
+          <li>Get inspired, network, and grow!</li>
+        </ul>
 
-    <p style="margin-top: 30px;"><em>The hotel is a quick 5-minute Uber ride from the Ridgeway Centre.</em></p>
+        <p style="margin-top: 20px;">🎟️ <strong>Grab your FREE visitor ticket now:</strong><br/>
+          <a href="{tracking_link}" target="_blank" style="display: inline-block; background-color: #2E86C1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px;">
+            Secure My Place Now
+          </a>
+        </p>
 
-    <p>We look forward to seeing you at the event!</p>
+        <p style="margin-top: 25px;"><em>There’s nothing quite like the energy of a live event, and this is your opportunity to be at the heart of it. Don’t wait until it’s too late!</em></p>
 
-    <br/>
-    <p>Best regards,</p>
-    <p>
-      Mike Randell<br/>
-      Marketing Executive | B2B Growth Expo<br/>
-      <a href="mailto:mike@miltonkeynesexpo.com">mike@miltonkeynesexpo.com</a><br/>
-      (+44) 03303 209 609
-    </p>
+        <p>We can't wait to welcome you at the expo!</p>
 
-    {tracking_pixel}
-  </body>
+        <br/>
+        <p>Best regards,</p>
+        <p>
+          Mike Randell<br/>
+          Marketing Executive | B2B Growth Expo<br/>
+          <a href="mailto:mike@miltonkeynesexpo.com">mike@miltonkeynesexpo.com</a><br/>
+          (+44) 03303 209 609
+        </p>
+
+        <p style="font-size: 12px; color: #888; text-align: center; margin-top: 20px;">
+          If you no longer wish to receive emails from us, you can <a href="{unsubscribe_link}" style="color: #2E86C1; text-decoration: none;">unsubscribe here</a>.
+        </p>
+
+        {tracking_pixel}
+      </body>
     </html>
     """
 
