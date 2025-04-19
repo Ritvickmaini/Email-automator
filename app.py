@@ -96,7 +96,7 @@ def generate_email_html(full_name, recipient_email=None):
     else:
         name_part = f" {full_name},"
 
-    event_url = "https://thebusinessgrowthcrowd.eventbrite.co.uk/?aff=B2BEXPO"
+    event_url = "https://www.eventbrite.com/e/milton-keynes-b2b-growth-expo-23rd-april-2025-free-visitor-ticket-tickets-998974207747?aff=REFERAFRIEND"
     encoded_event_url = urllib.parse.quote(event_url, safe='')
 
     email_for_tracking = recipient_email if recipient_email else "unknown@example.com"
@@ -107,7 +107,7 @@ def generate_email_html(full_name, recipient_email=None):
     return f"""
     <html>
       <body style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-        <h2 style="color: #2E86C1;">⏳ Only 5 Days to Go: Milton Keynes Business Expo 2025</h2>
+        <h2 style="color: #2E86C1;">⏳ Only 4 Days to Go: Milton Keynes Business Expo 2025</h2>
         <p>Dear <strong>{name_part}</strong>,</p>
 
         <p>The countdown is on! In just <strong>5 days</strong>, hundreds of business professionals, industry leaders, and forward-thinking entrepreneurs will gather under one roof for the <strong>Milton Keynes Business Expo 2025</strong>.</p>
@@ -126,7 +126,7 @@ def generate_email_html(full_name, recipient_email=None):
           <li>Get inspired, network, and grow!</li>
         </ul>
 
-        <p style="margin-top: 20px;">🎟️ <strong>Grab your FREE visitor ticket now:</strong><br/>
+        <p style="margin-top: 20px;">🎟️ <strong>Grab your Visitor ticket now:</strong><br/>
           <a href="{tracking_link}" target="_blank" style="display: inline-block; background-color: #2E86C1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px;">
             Secure My Place Now
           </a>
