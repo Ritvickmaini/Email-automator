@@ -127,9 +127,9 @@ def generate_email_html(full_name, recipient_email=None):
         </ul>
 
         <p style="margin-top: 20px;">🎟️ <strong>Grab your Visitor ticket now:</strong><br/>
-          <a href="{tracking_link}" target="_blank" style="display: inline-block; background-color: #2E86C1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px;">
-            Secure My Place Now
-          </a>
+          <a href="{tracking_link}" target="_blank" style="background-color: #2E86C1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+    Secure My Place Now
+</a>
         </p>
 
         <p style="margin-top: 25px;"><em>There’s nothing quite like the energy of a live event, and this is your opportunity to be at the heart of it. Don’t wait until it’s too late!</em></p>
