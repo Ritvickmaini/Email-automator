@@ -110,7 +110,7 @@ def generate_email_html(full_name, recipient_email=None):
         <h2 style="color: #2E86C1;">⏳ Only 4 Days to Go: Milton Keynes Business Expo 2025</h2>
         <p>Dear <strong>{name_part}</strong>,</p>
 
-        <p>The countdown is on! In just <strong>5 days</strong>, hundreds of business professionals, industry leaders, and forward-thinking entrepreneurs will gather under one roof for the <strong>Milton Keynes Business Expo 2025</strong>.</p>
+        <p>The countdown is on! In just <strong>4 days</strong>, hundreds of business professionals, industry leaders, and forward-thinking entrepreneurs will gather under one roof for the <strong>Milton Keynes Business Expo 2025</strong>.</p>
 
         <ul style="line-height: 1.6;">
           <li><strong>Date:</strong> Wednesday, 23rd April 2025</li>
