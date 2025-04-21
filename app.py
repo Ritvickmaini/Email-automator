@@ -90,7 +90,7 @@ def load_resume_point(timestamp):
     except Exception:
         return None
 
-def generate_email_html(full_name, recipient_email=None):
+def generate_email_html(full_name, recipient_email=None, subject=None):
     if not full_name or str(full_name).lower() == "nan":
         name_part = ","
     else:
@@ -98,10 +98,11 @@ def generate_email_html(full_name, recipient_email=None):
 
     event_url = "https://www.eventbrite.com/e/milton-keynes-b2b-growth-expo-23rd-april-2025-free-visitor-ticket-tickets-998974207747?aff=REFERAFRIEND"
     encoded_event_url = urllib.parse.quote(event_url, safe='')
-
+    
     email_for_tracking = recipient_email if recipient_email else "unknown@example.com"
-    tracking_link = f"https://tracking-oyzi.onrender.com/track/click?email={email_for_tracking}&url={encoded_event_url}"
-    tracking_pixel = f'<img src="https://tracking-oyzi.onrender.com/track/open?email={email_for_tracking}" width="1" height="1" style="display:none;">'
+    encoded_subject = urllib.parse.quote(subject or "No Subject", safe='')
+    tracking_link = f"https://tracking-oyzi.onrender.com/track/click?email={email_for_tracking}&url={encoded_event_url}&subject={encoded_subject}"
+    tracking_pixel = f'<img src="https://tracking-oyzi.onrender.com/track/open?email={email_for_tracking}&subject={encoded_subject}" width="1" height="1" style="display:none;">'
     unsubscribe_link = f"https://unsubscribe-thsj.onrender.com/unsubscribe?email={email_for_tracking}"
 
     return f"""
@@ -164,7 +165,7 @@ def send_email(sender_email, sender_password, row, subject):
         msg['Subject'] = subject
         msg['From'] = sender_email
         msg['To'] = row['email']
-        msg.set_content(generate_email_html(row['full_name'], row['email']), subtype='html')
+        msg.set_content(generate_email_html(row['full_name'], row['email'], subject), subtype='html')
 
         server.send_message(msg)
 
