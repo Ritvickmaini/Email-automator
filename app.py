@@ -108,6 +108,8 @@ def generate_email_html(full_name, recipient_email=None, subject=None):
     return f"""
     <html>
       <body style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+       {tracking_pixel} <!-- move tracking pixel HIGH UP for better load rate -->
+
         <h2 style="color: #2E86C1;">🎉 Thank You for Making Milton Keynes B2B Growth Expo 2025 a Huge Success!</h2>
 
         <p>Dear <strong>{name_part}</strong>,</p>
@@ -120,7 +122,7 @@ def generate_email_html(full_name, recipient_email=None, subject=None):
 
         <p>We hope you left with new ideas, valuable contacts, and exciting opportunities to fuel your business journey ahead.</p>
 
-        <h3 style="color: #2E86C1; margin-top: 30px;">🚀 What’s Next?</h3>
+        <h3 style="color: #2E86C1; margin-top: 30px;">What’s Next?</h3>
 
         <p>We are thrilled to announce that our next big event is already on the horizon:</p>
 
@@ -133,7 +135,7 @@ def generate_email_html(full_name, recipient_email=None, subject=None):
 
         <p>Get ready for another powerful day of learning, networking, and growing your business with an even bigger line-up of exhibitors, workshops, and keynote speakers!</p>
 
-        <p style="margin-top: 20px;">🎯 <strong>Early Bird Offer – 50% OFF!</strong><br/>
+        <p style="margin-top: 20px;"><strong>Early Bird Offer – 50% OFF!</strong><br/>
           Don't miss out on this exclusive deal!<br/>
           <strong>Use Code at Checkout:</strong> <span style="background-color: #F7DC6F; padding: 3px 6px; border-radius: 3px; font-weight: bold;">BCTC50</span>
         </p>
@@ -164,7 +166,6 @@ def generate_email_html(full_name, recipient_email=None, subject=None):
           If you no longer wish to receive emails from us, you can <a href="{unsubscribe_link}" style="color: #2E86C1; text-decoration: none;">unsubscribe here</a>.
         </p>
 
-        {tracking_pixel}
       </body>
     </html>
     """
