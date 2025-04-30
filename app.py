@@ -92,11 +92,11 @@ def load_resume_point(timestamp):
 
 def generate_email_html(full_name, recipient_email=None, subject=None):
     if not full_name or str(full_name).lower() == "nan":
-        name_part = ","
+        name_part = "Visitor"
     else:
-        name_part = f" {full_name},"
+        name_part = f"{full_name}"
 
-    event_url = "https://www.eventbrite.com/e/milton-keynes-b2b-growth-expo-23rd-april-2025-free-visitor-ticket-tickets-998974207747?aff=REFERAFRIEND"
+    event_url = "https://www.eventbrite.com/e/bournemouth-b2b-growth-expo-2025-book-your-stand-at-the-premier-b2b-show-tickets-815224106247?aff=oddtdtcreator"
     encoded_event_url = urllib.parse.quote(event_url, safe='')
     
     email_for_tracking = recipient_email if recipient_email else "unknown@example.com"
@@ -108,34 +108,48 @@ def generate_email_html(full_name, recipient_email=None, subject=None):
     return f"""
     <html>
       <body style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-        <h2 style="color: #2E86C1;">⏳ Only 4 Days to Go: Milton Keynes Business Expo 2025</h2>
+        <h2 style="color: #2E86C1;">🎉 Thank You for Making Milton Keynes B2B Growth Expo 2025 a Huge Success!</h2>
+
         <p>Dear <strong>{name_part}</strong>,</p>
 
-        <p>The countdown is on! In just <strong>4 days</strong>, hundreds of business professionals, industry leaders, and forward-thinking entrepreneurs will gather under one roof for the <strong>Milton Keynes Business Expo 2025</strong>.</p>
+        <p>On behalf of the entire <strong>B2B Growth Expo</strong> team, we would like to extend our heartfelt thanks to you for attending the <strong>Milton Keynes B2B Growth Expo 2025</strong> on 23rd April.</p>
+
+        <p>Your energy, enthusiasm, and engagement helped make this event a truly remarkable success!</p>
+
+        <p>Over 100+ exhibitors, inspiring speakers, and unlimited networking opportunities were made even more special by your presence.</p>
+
+        <p>We hope you left with new ideas, valuable contacts, and exciting opportunities to fuel your business journey ahead.</p>
+
+        <h3 style="color: #2E86C1; margin-top: 30px;">🚀 What’s Next?</h3>
+
+        <p>We are thrilled to announce that our next big event is already on the horizon:</p>
 
         <ul style="line-height: 1.6;">
-          <li><strong>Date:</strong> Wednesday, 23rd April 2025</li>
+          <li><strong>Event:</strong> Bournemouth B2B Growth Expo 2025</li>
+          <li><strong>Date:</strong> Thursday, 3rd July 2025</li>
+          <li><strong>Venue:</strong> Citygate Centre, 138a Holdenhurst Road, Bournemouth BH8 8AS</li>
           <li><strong>Time:</strong> 10:00 AM – 4:30 PM</li>
-          <li><strong>Venue:</strong> The Ridgeway Centre, MK12 5TH, United Kingdom</li>
         </ul>
 
-        <p> Why should you attend?</p>
-        <ul style="line-height: 1.6;">
-          <li>Meet over 100+ local and national businesses</li>
-          <li>Gain insights from expert speakers and panelists</li>
-          <li>Build powerful connections that can drive your business forward</li>
-          <li>Get inspired, network, and grow!</li>
-        </ul>
+        <p>Get ready for another powerful day of learning, networking, and growing your business with an even bigger line-up of exhibitors, workshops, and keynote speakers!</p>
 
-        <p style="margin-top: 20px;">🎟️ <strong>Grab your Visitor ticket now:</strong><br/>
-          <a href="{tracking_link}" target="_blank" style="background-color: #2E86C1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
-    Secure My Place Now
-</a>
+        <p style="margin-top: 20px;">🎯 <strong>Early Bird Offer – 50% OFF!</strong><br/>
+          Don't miss out on this exclusive deal!<br/>
+          <strong>Use Code at Checkout:</strong> <span style="background-color: #F7DC6F; padding: 3px 6px; border-radius: 3px; font-weight: bold;">BCTC50</span>
         </p>
 
-        <p style="margin-top: 25px;"><em>There’s nothing quite like the energy of a live event, and this is your opportunity to be at the heart of it. Don’t wait until it’s too late!</em></p>
+        <p style="margin-top: 10px;">
+          <a href="{tracking_link}" target="_blank" style="background-color: #2E86C1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+            Book My Stand Now
+          </a>
+        </p>
 
-        <p>We can't wait to welcome you at the expo!</p>
+        <p style="margin-top: 25px;"><em>Offer valid for a limited time—act fast and secure your spot at the South’s biggest B2B growth event!</em></p>
+
+        <br/>
+        <p>Once again, thank you for being an important part of the Milton Keynes B2B Growth Expo community.</p>
+
+        <p>We can’t wait to see you again soon — building, growing, and succeeding together!</p>
 
         <br/>
         <p>Best regards,</p>
